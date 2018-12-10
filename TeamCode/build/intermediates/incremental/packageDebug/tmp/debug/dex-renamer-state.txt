@@ -1,0 +1,4 @@
+#Fri Dec 07 16:43:02 EST 2018
+base.0=/Users/pramodharya/Develop/FTC/ftc_app/TeamCode/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
