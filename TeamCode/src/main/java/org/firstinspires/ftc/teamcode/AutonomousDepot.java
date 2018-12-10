@@ -54,8 +54,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 
-@Autonomous(name="Autonomous Crater", group="Pushbot")
-public class AutonomousCrater extends LinearOpMode {
+@Autonomous(name="Autonomous Depot", group="Pushbot")
+public class AutonomousDepot extends LinearOpMode {
 
     /* Declare OpMode members. */
 //    ModernRoboticsI2cGyro   gyro    = null;                    // Additional Gyro device
@@ -68,8 +68,8 @@ public class AutonomousCrater extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.8;     // Nominal speed for better accuracy.
-    static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
+    static final double     DRIVE_SPEED             = 1;     // Nominal speed for better accuracy.
+    static final double     TURN_SPEED              = 0.7;     // Nominal half speed for better accuracy.
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
@@ -151,7 +151,26 @@ public class AutonomousCrater extends LinearOpMode {
         motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         waitForStart();
-//        unhook(26300);
+
+        unhook(24500);
+        motorHDrive.setPower(1);
+        gyroTurn(DRIVE_SPEED, -20);
+        pause();
+        fwd(DRIVE_SPEED,1000);
+        pause();
+        gyroTurn(TURN_SPEED, -4);
+        pause();
+        fwd(DRIVE_SPEED,6000);
+        outtake(3);
+        gyroTurn(TURN_SPEED, -118);
+        pause();
+        fwd(DRIVE_SPEED, 9500);
+        lift(1,1.5);
+        fwd(.3,350);
+        pause();
+        extend(1,3);
+
+//        unhook(24500);
 //        motorHDrive.setPower(1);
 //        gyroTurn(DRIVE_SPEED, -20);
 //        pause();
@@ -159,57 +178,53 @@ public class AutonomousCrater extends LinearOpMode {
 //        pause();
 //        gyroTurn(TURN_SPEED, -4);
 //        pause();
-//        Hright(1,3000);
-//        pause();
-//        gyroTurn(TURN_SPEED,-4);
-//        pause();
 //        fwd(DRIVE_SPEED,1900);
 //        gyroTurn(TURN_SPEED,-4);
+//        if (colorCheck()) {
+//            fwd(DRIVE_SPEED, 4900);
+//            outtake(1.5);
+//            bwd(DRIVE_SPEED,1000);
+//            //outtake
+//            // move forward
+//        } else {
+//            bwd(DRIVE_SPEED, 1000);
+//            pause();
 
-        if (false) {
-            fwd(DRIVE_SPEED, 5000);
-            outtake(1.5);
-            bwd(DRIVE_SPEED,1000);
-            //outtake
-            // move forward
-        } else {
-            bwd(DRIVE_SPEED, 1000);
-            pause();
-            gyroTurn(TURN_SPEED, -30);
-            pause();
-            fwd(DRIVE_SPEED,1900);
-            pause();
-            //slide out
-            if (false) {
-                fwd(DRIVE_SPEED,2500);
-                pause();
-                gyroTurn(TURN_SPEED,35);
-                pause();
-                fwd(DRIVE_SPEED, 3000);
-                outtake(1.5);
-                //outtake
-                //slide in
-                //move forward
-                //turn left 70
-                //fwd
-            } else {
-              bwd(DRIVE_SPEED,2500);
-              pause();
-              gyroTurn(TURN_SPEED, 30);
-              pause();
-              fwd(DRIVE_SPEED,6500);
-              pause();
-              gyroTurn(TURN_SPEED, -35);
-              pause();
-              fwd(DRIVE_SPEED,4300);
-              outtake(1.5);
-                //slide in
-                //turn left 70
-                //fwd
-                //turn right 35
-                //fwd
-            }
-        }
+//            gyroTurn(TURN_SPEED, -30);
+//            pause();
+//            fwd(DRIVE_SPEED,1900);
+//            pause();
+//            //slide out
+//            if (colorCheck()) {
+//                fwd(DRIVE_SPEED,2400);
+//                pause();
+//                gyroTurn(TURN_SPEED,35);
+//                pause();
+//                fwd(DRIVE_SPEED, 3000);
+//                outtake(1.5);
+//                //outtake
+//                //slide in
+//                //move forward
+//                //turn left 70
+//                //fwd
+//            } else {
+//                bwd(DRIVE_SPEED,2500);
+//                pause();
+//                gyroTurn(TURN_SPEED, 30);
+//                pause();
+//                fwd(DRIVE_SPEED,6500);
+//                pause();
+//                gyroTurn(TURN_SPEED, -35);
+//                pause();
+//                fwd(DRIVE_SPEED,4300);
+//                outtake(1.5);
+//                //slide in
+//                //turn left 70
+//                //fwd
+//                //turn right 35
+//                //fwd
+//            }
+//        }
 
     }
 
@@ -280,6 +295,22 @@ public class AutonomousCrater extends LinearOpMode {
         motorIntake.setPower(0);
     }
 
+    public void extend(double power, double time) {
+        timer.reset();
+        while(opModeIsActive() && (timer.time() < time)) {
+            motorHorizontal.setPower(power);
+        }
+        motorHorizontal.setPower(0);
+    }
+
+    public void lift(double power, double time) {
+        timer.reset();
+        while(opModeIsActive() && (timer.time() < time)) {
+            motorLift.setPower(power);
+        }
+        motorLift.setPower(0);
+    }
+
     public boolean colorCheck() {
         int scale = 100;
         double red;
@@ -312,7 +343,6 @@ public class AutonomousCrater extends LinearOpMode {
             return false;
         }
     }
-
     public void up() {
         servoFlipper1.setPosition(SERVO_DOWN);
         servoFlipper2.setPosition(SERVO_UP);
@@ -324,7 +354,7 @@ public class AutonomousCrater extends LinearOpMode {
     }
 
     public void pause() {
-        gyroHold(0,0,.3);
+        gyroHold(0,0,.15);
     }
 
     public void unhook(int value) {
