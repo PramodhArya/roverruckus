@@ -129,7 +129,7 @@ public class TeleOP extends OpMode
         } else {
             motorLift.setPower(0);
         }
-
+        
 //      Intake
         if(gamepad1.left_trigger != 0) {
             motorIntake.setPower(powerCurve(gamepad1.left_trigger));
